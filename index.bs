@@ -29,17 +29,16 @@
     <abbr title="Application Programming Interface">API</abbr> for processing and synthesizing
     audio in web applications.
     
-    The primary paradigm is of an audio routing graph, where a number of {{AudioNode}} objects are
+    The primary paradigm is of an audio routing graph, where a number of AudioNode objects are
     connected together to define the overall audio rendering. The actual processing will primarily
     take place in the underlying implementation (typically optimized Assembly / C / C++ code), but
-    [[#AudioWorklet|direct script processing and synthesis]] is also supported.
+    direct script processing and synthesis is also supported.
   
     This API is designed to be used in conjunction with other APIs and elements on the web platform,
     notably: XMLHttpRequest [[XHR]] (using the <code>responseType</code> and <code>response</code>
     attributes). For games and interactive applications, it is anticipated to be used with the
     <code>canvas</code> 2D [[2dcontext]] and WebGL [[WEBGL]] 3D graphics APIs.
 
-    The [[#introductory]] section covers the motivation behind this specification.
   Markup Shorthands: markdown on, dfn on, css off
 </pre>
 
@@ -56,92 +55,16 @@ specification to include the capabilities found in modern game audio engines as
 well as some of the mixing, processing, and filtering tasks that are found in
 modern desktop audio production applications.
 
-The APIs have been designed with a wide variety of use cases
-[[webaudio-usecases]] in mind. Ideally, it should be able to support
-<i>any</i> use case which could reasonably be implemented with an optimized C++
-engine controlled via script and run in a browser. That said, modern desktop
-audio software can have very advanced capabilities, some of which would be
-difficult or impossible to build with this system. Apple's Logic Audio is one
-such application which has support for external MIDI controllers, arbitrary
-plugin audio effects and synthesizers, highly optimized direct-to-disk audio
-file reading/writing, tightly integrated time-stretching, and so on.
-Nevertheless, the proposed system will be quite capable of supporting a large
-range of reasonably complex games and interactive applications, including
-musical ones. And it can be a very good complement to the more advanced graphics
-features offered by WebGL. The API has been designed so that more advanced
-capabilities can be added at a later time.
-    
-<h3 id="Features">
-Features</h3>
-    
-The API supports these primary features:
-
-* [[#ModularRouting|Modular routing]] for simple or complex
-  mixing/effect architectures.
-
-* High dynamic range, using 32-bit floats for internal processing.
-
-* [[#AudioParam|Sample-accurate scheduled sound playback]]
-  with low [[#latency|latency]] for musical applications
-  requiring a very high degree of rhythmic precision such as drum
-  machines and sequencers. This also includes the possibility of
-  [[#DynamicLifetime|dynamic creation]] of effects.
-
-* Automation of audio parameters for envelopes, fade-ins /
-  fade-outs, granular effects, filter sweeps, LFOs etc.
-
-* Flexible handling of channels in an audio stream, allowing them
-  to be split and merged.
-
-* Processing of audio sources from an <{audio}> or <{video}>
-  {{MediaElementAudioSourceNode|media element}}.
-
-* Processing live audio input using a {{MediaStreamTrackAudioSourceNode|MediaStream}} from
-  {{getUserMedia()}}.
-
-* Integration with WebRTC
-  * Processing audio received from a remote peer using a
-    {{MediaStreamTrackAudioSourceNode}} and
-    [[!webrtc]].
-
-  * Sending a generated or processed audio stream to a remote
-    peer using a {{MediaStreamAudioDestinationNode}}
-    and [[!webrtc]].
-
-* Audio stream synthesis and processing [[#AudioWorklet|directly using scripts]].
-
-* [[#Spatialization|Spatialized audio]] supporting a wide
-  range of 3D games and immersive environments:
-
-  * Panning models: equalpower, HRTF, pass-through
-  * Distance Attenuation
-  * Sound Cones
-  * Obstruction / Occlusion
-  * Source / Listener based
-
-* A convolution engine for a wide
-  range of linear effects, especially very high-quality room effects.
-  Here are some examples of possible effects:
-
-  * Small / large room
-  * Cathedral
-  * Concert hall
-  * Cave
-  * Tunnel
-  * Hallway
-  * Forest
-  * Amphitheater
-  * Sound of a distant room through a doorway
-  * Extreme filters
-  * Strange backwards effects
-  * Extreme comb filter effects
-
-* Dynamics compression for overall control and sweetening of the mix
-
-* Efficient [[#AnalyserNode|real-time time-domain and frequency-domain analysis / music visualizer support]].
-
-* Efficient biquad filters for lowpass, highpass, and other common filters.
-
-* A Waveshaping effect for distortion and other non-linear effects
-
-* Oscillators
+The APIs have been designed with a wide variety of use cases in mind. Ideally,
+it should be able to support <i>any</i> use case which could reasonably be
+implemented with an optimized C++ engine controlled via script and run in a
+browser. That said, modern desktop audio software can have very advanced
+capabilities, some of which would be difficult or impossible to build with this
+system. Apple's Logic Audio is one such application which has support for
+external MIDI controllers, arbitrary plugin audio effects and synthesizers,
+highly optimized direct-to-disk audio file reading/writing, tightly integrated
+time-stretching, and so on. Nevertheless, the proposed system will be quite
+capable of supporting a large range of reasonably complex games and interactive
+applications, including musical ones. And it can be a very good complement to
+the more advanced graphics features offered by WebGL. The API has been designed
+so that more advanced capabilities can be added at a later time.
