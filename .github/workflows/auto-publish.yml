@@ -7,7 +7,7 @@ on:
 
 jobs:
   main:
-    name: Deplay to GitHub pages
+    name: Deploy to GitHub pages
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repository
