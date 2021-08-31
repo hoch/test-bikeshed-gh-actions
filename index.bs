@@ -1,0 +1,147 @@
+<pre class=metadata>
+  Title: Web Audio API
+  Shortname: webaudio
+  Level: 1
+  Group: audiowg
+  Status: ED
+  ED: https://webaudio.github.io/web-audio-api/
+  TR: https://www.w3.org/TR/webaudio/
+  Favicon: favicon.png
+  Previous Version: https://www.w3.org/TR/2021/CR-webaudio-20210114/
+  Previous Version: https://www.w3.org/TR/2020/CR-webaudio-20200611/
+  Previous Version: https://www.w3.org/TR/2018/CR-webaudio-20180918/
+  Previous Version: https://www.w3.org/TR/2018/WD-webaudio-20180619/
+  Previous Version: https://www.w3.org/TR/2015/WD-webaudio-20151208/
+  Previous Version: https://www.w3.org/TR/2013/WD-webaudio-20131010/
+  Previous Version: https://www.w3.org/TR/2012/WD-webaudio-20121213/
+  Previous Version: https://www.w3.org/TR/2012/WD-webaudio-20120802/
+  Previous Version: https://www.w3.org/TR/2012/WD-webaudio-20120315/
+  Previous Version: https://www.w3.org/TR/2011/WD-webaudio-20111215/
+  Editor: Paul Adenot, Mozilla (https://www.mozilla.org/), padenot@mozilla.com, w3cid 62410
+  Editor: Hongchan Choi, Google (https://www.google.com/), hongchan@google.com, w3cid 74103
+  Former Editor: Raymond Toy (until Oct 2018)
+  Former Editor: Chris Wilson (Until Jan 2016)
+  Former Editor: Chris Rogers (Until Aug 2013)
+  Implementation Report: implementation-report.html
+  Test Suite: https://github.com/web-platform-tests/wpt/tree/master/webaudio
+  Repository: WebAudio/web-audio-api
+  Abstract: This specification describes a high-level Web
+    <abbr title="Application Programming Interface">API</abbr> for processing and synthesizing
+    audio in web applications.
+    
+    The primary paradigm is of an audio routing graph, where a number of {{AudioNode}} objects are
+    connected together to define the overall audio rendering. The actual processing will primarily
+    take place in the underlying implementation (typically optimized Assembly / C / C++ code), but
+    [[#AudioWorklet|direct script processing and synthesis]] is also supported.
+  
+    This API is designed to be used in conjunction with other APIs and elements on the web platform,
+    notably: XMLHttpRequest [[XHR]] (using the <code>responseType</code> and <code>response</code>
+    attributes). For games and interactive applications, it is anticipated to be used with the
+    <code>canvas</code> 2D [[2dcontext]] and WebGL [[WEBGL]] 3D graphics APIs.
+
+    The [[#introductory]] section covers the motivation behind this specification.
+  Markup Shorthands: markdown on, dfn on, css off
+</pre>
+
+<h2 id="introductory" class=no-num>
+  Introduction</h2>
+    
+Audio on the web has been fairly primitive up to this point and until very
+recently has had to be delivered through plugins such as Flash and QuickTime.
+The introduction of the <{audio}> element in HTML5 is very important, allowing
+for basic streaming audio playback. But, it is not powerful enough to handle
+more complex audio applications. For sophisticated web-based games or
+interactive applications, another solution is required. It is a goal of this
+specification to include the capabilities found in modern game audio engines as
+well as some of the mixing, processing, and filtering tasks that are found in
+modern desktop audio production applications.
+
+The APIs have been designed with a wide variety of use cases
+[[webaudio-usecases]] in mind. Ideally, it should be able to support
+<i>any</i> use case which could reasonably be implemented with an optimized C++
+engine controlled via script and run in a browser. That said, modern desktop
+audio software can have very advanced capabilities, some of which would be
+difficult or impossible to build with this system. Apple's Logic Audio is one
+such application which has support for external MIDI controllers, arbitrary
+plugin audio effects and synthesizers, highly optimized direct-to-disk audio
+file reading/writing, tightly integrated time-stretching, and so on.
+Nevertheless, the proposed system will be quite capable of supporting a large
+range of reasonably complex games and interactive applications, including
+musical ones. And it can be a very good complement to the more advanced graphics
+features offered by WebGL. The API has been designed so that more advanced
+capabilities can be added at a later time.
+    
+<h3 id="Features">
+Features</h3>
+    
+The API supports these primary features:
+
+* [[#ModularRouting|Modular routing]] for simple or complex
+  mixing/effect architectures.
+
+* High dynamic range, using 32-bit floats for internal processing.
+
+* [[#AudioParam|Sample-accurate scheduled sound playback]]
+  with low [[#latency|latency]] for musical applications
+  requiring a very high degree of rhythmic precision such as drum
+  machines and sequencers. This also includes the possibility of
+  [[#DynamicLifetime|dynamic creation]] of effects.
+
+* Automation of audio parameters for envelopes, fade-ins /
+  fade-outs, granular effects, filter sweeps, LFOs etc.
+
+* Flexible handling of channels in an audio stream, allowing them
+  to be split and merged.
+
+* Processing of audio sources from an <{audio}> or <{video}>
+  {{MediaElementAudioSourceNode|media element}}.
+
+* Processing live audio input using a {{MediaStreamTrackAudioSourceNode|MediaStream}} from
+  {{getUserMedia()}}.
+
+* Integration with WebRTC
+  * Processing audio received from a remote peer using a
+    {{MediaStreamTrackAudioSourceNode}} and
+    [[!webrtc]].
+
+  * Sending a generated or processed audio stream to a remote
+    peer using a {{MediaStreamAudioDestinationNode}}
+    and [[!webrtc]].
+
+* Audio stream synthesis and processing [[#AudioWorklet|directly using scripts]].
+
+* [[#Spatialization|Spatialized audio]] supporting a wide
+  range of 3D games and immersive environments:
+
+  * Panning models: equalpower, HRTF, pass-through
+  * Distance Attenuation
+  * Sound Cones
+  * Obstruction / Occlusion
+  * Source / Listener based
+
+* A convolution engine for a wide
+  range of linear effects, especially very high-quality room effects.
+  Here are some examples of possible effects:
+
+  * Small / large room
+  * Cathedral
+  * Concert hall
+  * Cave
+  * Tunnel
+  * Hallway
+  * Forest
+  * Amphitheater
+  * Sound of a distant room through a doorway
+  * Extreme filters
+  * Strange backwards effects
+  * Extreme comb filter effects
+
+* Dynamics compression for overall control and sweetening of the mix
+
+* Efficient [[#AnalyserNode|real-time time-domain and frequency-domain analysis / music visualizer support]].
+
+* Efficient biquad filters for lowpass, highpass, and other common filters.
+
+* A Waveshaping effect for distortion and other non-linear effects
+
+* Oscillators
