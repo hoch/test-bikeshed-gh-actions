@@ -1,0 +1,31 @@
+<pre class=metadata>
+Title: Web Audio API
+Shortname: webaudio
+Level: 1
+Group: audiowg
+Status: ED
+ED: https://webaudio.github.io/web-audio-api/
+TR: https://www.w3.org/TR/webaudio/
+Favicon: favicon.png
+Previous Version: https://www.w3.org/TR/2021/CR-webaudio-20210114/
+Previous Version: https://www.w3.org/TR/2020/CR-webaudio-20200611/
+Previous Version: https://www.w3.org/TR/2018/CR-webaudio-20180918/
+Previous Version: https://www.w3.org/TR/2018/WD-webaudio-20180619/
+Previous Version: https://www.w3.org/TR/2015/WD-webaudio-20151208/
+Previous Version: https://www.w3.org/TR/2013/WD-webaudio-20131010/
+Previous Version: https://www.w3.org/TR/2012/WD-webaudio-20121213/
+Previous Version: https://www.w3.org/TR/2012/WD-webaudio-20120802/
+Previous Version: https://www.w3.org/TR/2012/WD-webaudio-20120315/
+Previous Version: https://www.w3.org/TR/2011/WD-webaudio-20111215/
+Editor: Paul Adenot, Mozilla (https://www.mozilla.org/), padenot@mozilla.com, w3cid 62410
+Editor: Hongchan Choi, Google (https://www.google.com/), hongchan@google.com, w3cid 74103
+Former Editor: Raymond Toy (until Oct 2018)
+Former Editor: Chris Wilson (Until Jan 2016)
+Former Editor: Chris Rogers (Until Aug 2013)
+Implementation Report: implementation-report.html
+Test Suite: https://github.com/web-platform-tests/wpt/tree/master/webaudio
+Repository: WebAudio/web-audio-api
+Abstract: This specification describes a high-level Web <abbr title="Application Programming Interface">API</abbr>
+	for processing and synthesizing audio in web applications.
+Markup Shorthands: markdown on, dfn on, css off
+</pre>
