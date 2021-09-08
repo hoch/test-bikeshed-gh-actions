@@ -18,5 +18,5 @@ jobs:
         run: pip3 install bikeshed && bikeshed update
         shell: bash
       - name: Build spec
-        run: bash ./compile.sh
+        run: bash ./build.sh
         shell: bash
