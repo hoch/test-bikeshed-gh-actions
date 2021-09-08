@@ -20,3 +20,8 @@ jobs:
       - name: Build spec
         run: bash ./build.sh
         shell: bash
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
